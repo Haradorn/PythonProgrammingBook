@@ -82,7 +82,7 @@ class Ship(Collider):
     VELOCITY_STEP = .03
     MISSILE_DELAY = 25
     VELOCITY_MAX = 3
-    #sound = games.load_sound("thrust.wav")
+    sound = games.load_sound("thrust.wav")
     def __init__(self, game, x, y):
         self.game = game
         super(Ship, self).__init__(image= Ship.image, x = x, y = y)
@@ -95,11 +95,11 @@ class Ship(Collider):
             self.angle -= Ship.ROTATION_STEP
         if games.keyboard.is_pressed(games.K_RIGHT):
             self.angle += Ship.ROTATION_STEP
-        if games.keyboard.is_pressed(games.K_UP):
-            #Ship.sound.play()
+        if games.keyboard.is_pressed(games.K_UP):            
             angle = self.angle * math.pi / 180
             self.dx += Ship.VELOCITY_STEP * math.sin(angle)
             self.dy += Ship.VELOCITY_STEP * -math.cos(angle)
+            Ship.sound.play()
         #if self.top > games.screen.height:
             #self.bottom = 0
         #if self.bottom < 0:
@@ -235,6 +235,7 @@ def main():
     #games.screen.add(the_ship)
     #games.screen.mainloop()
 main()
+
 
 
 
