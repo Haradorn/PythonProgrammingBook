@@ -29,6 +29,8 @@ class Explosion(games.Animation):
                                         x = x, y = y,
                                         repeat_interval= 4, n_repeats= 1,
                                         is_collideable= False)
+        Ship.sound.stop()
+        Missile.sound.stop()
         Explosion.sound.play()
 class Collider(Wrapper):
     def update(self):
@@ -65,7 +67,6 @@ class Asteroid(Wrapper):
         Asteroid.total -= 1
         self.game.score.value += int(Asteroid.POINTS / self.size)
         self.game.score.right = games.screen.width - 10
-        new_asteroid = Asteroid(game = self.game, x = self.x, y = self.y, size = self.size)
         if self.size != Asteroid.SMALL:
             for i in range(Asteroid.SPAWN):
                 new_asteroid = Asteroid(game = self.game,
@@ -95,7 +96,7 @@ class Ship(Collider):
             self.angle -= Ship.ROTATION_STEP
         if games.keyboard.is_pressed(games.K_RIGHT):
             self.angle += Ship.ROTATION_STEP
-        if games.keyboard.is_pressed(games.K_UP):            
+        if games.keyboard.is_pressed(games.K_UP):
             angle = self.angle * math.pi / 180
             self.dx += Ship.VELOCITY_STEP * math.sin(angle)
             self.dy += Ship.VELOCITY_STEP * -math.cos(angle)
@@ -109,6 +110,7 @@ class Ship(Collider):
         #if self.right < 0:
             #self.left = games.screen.width
         if games.keyboard.is_pressed(games.K_SPACE) and self.missile_wait == 0:
+            Ship.sound.stop()
             new_missile = Missile(self.x, self.y, self.angle)
             games.screen.add(new_missile)
             self.missile_wait = Ship.MISSILE_DELAY
@@ -124,7 +126,7 @@ class Ship(Collider):
 class Missile(Collider):
     image = games.load_image("missile.bmp")
     sound = games.load_sound("missile.wav")
-    BUFFER = 90
+    BUFFER = 88
     VELOCITY_FACTOR = 7
     LIFETIME = 40
     MISSILE_ANGLE = 0
@@ -170,6 +172,7 @@ class Game(object):
                                 top = 5,
                                 right = games.screen.width - 10,
                                 is_collideable = False)
+        games.screen.add(self.score)
         self.ship = Ship(game = self,
                          x = games.screen.width / 2,
                          y = games.screen.height / 2)
@@ -235,7 +238,6 @@ def main():
     #games.screen.add(the_ship)
     #games.screen.mainloop()
 main()
-
 
 
 
